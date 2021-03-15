@@ -4,6 +4,7 @@ import com.project.retroboard.model.Comment;
 import com.project.retroboard.repo.CommentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CommentService {
     private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
-
+    @Autowired
     private CommentRepository commentRepository;
 
     public CommentService(CommentRepository commentRepository){
@@ -23,7 +24,7 @@ public class CommentService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public List<Comment> saveAll(List<Comment> commentList){
+    public List<Comment> saveComments(List<Comment> commentList){
         logger.info("saving ", commentList);
        return commentRepository.saveAll(commentList);
     }
