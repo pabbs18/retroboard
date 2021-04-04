@@ -1,3 +1,4 @@
+/*
 package com.project.retroboard.service;
 
 import com.project.retroboard.model.User;
@@ -28,10 +29,12 @@ public class UserServiceTest {
     //@Autowired
     private UserRepository userRepository;
 
-  /*  @Before
+  */
+/*  @Before
     void init(){
         userService = new UserService(userRepository);
-    }*/
+    }*//*
+
 
     @Test
     public void loadByUsername() {
@@ -68,4 +71,4 @@ public class UserServiceTest {
 
 
     }
-}
+}*/

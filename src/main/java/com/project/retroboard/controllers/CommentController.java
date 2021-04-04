@@ -23,12 +23,14 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/get/comments")
+    @GetMapping(value="/get/comments", produces = "application/json")
     public List<Comment> getComments(){
+        System.out.println("Entered get comment");
         return commentService.getCommentsForToday();
+
     }
 
-    @PostMapping("/create/comment")
+    @PostMapping(value = "/create/comment")
     public ResponseEntity<String> createComment(@RequestParam(name = "plusComment", required = false) String plusComment,
                                                 @RequestParam(name = "deltaComment", required = false) String deltaComment,
                                                 @RequestParam(name = "starComment", required = false)String starComment){

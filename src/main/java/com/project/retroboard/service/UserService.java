@@ -1,37 +1,46 @@
 package com.project.retroboard.service;
 
+import com.project.retroboard.model.MyUserDetails;
 import com.project.retroboard.model.User;
 import com.project.retroboard.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-
-    public UserDetails loadByUsername(String username) throws UsernameNotFoundException{
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException(username);
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                Arrays.asList(new SimpleGrantedAuthority(user.getRole())));
-    }
-
     @Transactional(rollbackFor = Exception.class)
-    public User saveUser(User user){
-        return userRepository.save(user);
+    public void createUser(String username, String password, String role){
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setRole(role);
+
+        userRepository.save(user);
     }
 
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
+
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found "+username));
+
+        return user.map(MyUserDetails:: new).get();
+
+
+    }
 }

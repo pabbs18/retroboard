@@ -27,4 +27,5 @@ public class Comment {
 
     @CreatedBy
     private String createdBy;
+
 }
